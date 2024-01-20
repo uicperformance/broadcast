@@ -60,10 +60,13 @@ slow reading as well.
 
 ## expectations
 
-You can use whatever tools or help you want to build this program. However, keep in mind that if 
-you lean to heavily on others, or on tools, you're likely not learning anything. 
+You can use whatever tools or help you want to build this program. You could consider starting with
+the epoll program I showed in class, but that's not at all a requirement.
 
-In the midterm later, you will need the skills you develop here. 
+Keep in mind that if you lean to heavily on others, or on AI tools, you're likely not learning much. In the midterm later, you will need the skills and knowledge you develop here.
+
+Sometimes, the right skill is to know how to use an AI tool to get something done fast. Other times, you need to understand how things actually work, to get to the goal. So take this as
+an opportunity to explore the problem space and learn different ways of getting the job done.
 
 ## some ideas to get you started
 
@@ -82,3 +85,5 @@ view than strace)
 There are no performance expectations on this assignment, except that it should keep making progress, quickly forward messages, and handle a variety of client settings (including the default setting), with multiple clients (but no more than 10). 
 
 If you have a couple of clients running, try connecting with two `nc` clients as well, and type in one to see if the other receives it. The test clients will complain, but that's ok. 
+
+Keep in mind that using AI tools is legitimate in this class. It's _not_ always the best way to learn - they lie, they don't really know what's going on, and if you let them do your work for you, you probably won't know what's going on either in the end. That said, they're also incredibly good tools, so don't dismiss them, just try not to depend on them. 
