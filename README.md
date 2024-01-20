@@ -48,3 +48,37 @@ where `5687` is a number you choose, above 1024 and below 32768. Use that port f
 pick something unique.
 
 The client takes a number of parameters. Try `cargo run -- --help` to learn more. 
+You may need to [install rust](https://www.rust-lang.org/tools/install). 
+
+## challenges
+
+The clients are weird, in that they don't always send full messages in one go, and they can be slow
+at reading. This makes life harder as an epoll server. Try running the client with `-P 0 -r 0` at first, which provides nice client behavior. 
+
+Once they stop complaining about incorrect messages, drop the `-P 0` to start seeing a few partially transmitted messages. And eventually introduce a larger `-r` to introduce some
+slow reading as well.
+
+## expectations
+
+You can use whatever tools or help you want to build this program. However, keep in mind that if 
+you lean to heavily on others, or on tools, you're likely not learning anything. 
+
+In the midterm later, you will need the skills you develop here. 
+
+## some ideas to get you started
+
+Try using `nc localhost PORTNUMBER` to listen in to what the server is sending. You can even
+type in that window and the server should echo that to other nc clients, but of course, the
+test client won't like what you say unless you write exactly the message it expects.
+
+That works great when the server is sending the wrong stuff - you can see what's happening.
+When the server _isn't sending anything_, listening in won't help. Here are some other things you can try:
+
+- use `strace` to see what the server is waiting for at the moment. 
+- use `gdb` to step through how the server gets into whatever state it is stuck in.
+- use `tcpdump -i lo port PORTNUMBER` to see what data is being sent over sockets (a different
+view than strace)
+
+There are no performance expectations on this assignment, except that it should keep making progress, quickly forward messages, and handle a variety of client settings (including the default setting), with multiple clients (but no more than 10). 
+
+If you have a couple of clients running, try connecting with two `nc` clients as well, and type in one to see if the other receives it. The test clients will complain, but that's ok. 
