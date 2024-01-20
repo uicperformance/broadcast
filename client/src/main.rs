@@ -12,7 +12,7 @@ struct Opt {
     /// Port number to connect to
     #[structopt(short, long, default_value = "9090")]
     port: u16,
-    #[structopt(short, long, help = "Interval between reads in milliseconds.", default_value = "0")]
+    #[structopt(short, long, help = "Interval between reads in milliseconds.", default_value = "10")]
     read_interval: u64,
     #[structopt(short, long, default_value = "100")]
     full_batch: u64,

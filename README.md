@@ -25,8 +25,7 @@ You may also want to set up your own environment, so that you still have the too
 
 This GIT repository contains the template code. There is a server.c, as well as small Rust project containing a test client.
 
-To build server.c, simply use `make server`. This is a multi-threaded server that meets
-all the requirements for server behavior. Except, of course, it is multi-threaded.
+To build server.c, simply use `make server`. This is a multi-threaded server that (hopefully) meets the requirements for server behavior. Except, of course, it is multi-threaded.
 
 Your job is to provide the same behavior, but with a single threaded server. That is,
 don't use `pthread_create` or anything like that. Instead, you are to use `epoll`` to
@@ -37,3 +36,15 @@ For each connected socket (there may be a few), it listens for incoming messages
 A message is a single line of text, up to 255 bytes. 
 When it has received a full message, it immediately sends that message to all the other
 connected clients. 
+
+## a client for testing
+
+The `client` folder has a handy client for checking correct behavior under a variety of 
+circumstances. To run it, use 
+
+```cargo run -- --port 5678```
+
+where `5687` is a number you choose, above 1024 and below 32768. Use that port for both the server and the client. If you use the same port number as someone else in class, you'll have problems, so
+pick something unique.
+
+The client takes a number of parameters. Try `cargo run -- --help` to learn more. 
