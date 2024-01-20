@@ -4,9 +4,21 @@ use std::thread;
 use std::time::{Duration, Instant};
 use rand::{thread_rng, Rng};
 
+use structopt::StructOpt;
+
+#[derive(StructOpt, Debug)]
+#[structopt(name = "socket_client")]
+struct Opt {
+    /// Port number to connect to
+    #[structopt(short, long, default_value = "9090")]
+    port: u16,
+}
+
 fn main() {
+    let opt = Opt::from_args();
+
     let message = "Hello World, UIC CS463 was here!\n";
-    let addr = "localhost:9090";
+    let addr = format!("localhost:{}", opt.port);
 
     // Connect to the server
     match TcpStream::connect(addr) {
@@ -78,7 +90,7 @@ fn main() {
                     }
                 }
             }
-            
+
             // Close the connection gracefully
             stream.shutdown(Shutdown::Both).expect("shutdown call failed");
             
