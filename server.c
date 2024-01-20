@@ -8,6 +8,8 @@
 #define MAX_CLIENTS 10
 
 int client_sockets[MAX_CLIENTS];
+pthread_mutex_t client_mutex[MAX_CLIENTS] = {PTHREAD_MUTEX_INITIALIZER};
+
 int num_clients = 0;
 pthread_mutex_t clients_mutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -17,16 +19,20 @@ void error(const char *msg) {
 }
 
 void broadcast_message(char *message, int sender_sd) {
-    pthread_mutex_lock(&clients_mutex);
+
+    // for simplicity, we don't take the clients lock here.
+    // this is in principle racy, but in practice... well, in C
+    // we get to do this stuff. In Rust, the compiler won't let us.
+    // which is better? you decide. But this is a C program so...
 
     for (int i = 0; i < MAX_CLIENTS; i++) {
         int sd = client_sockets[i];
         if (sd > 0 && sd != sender_sd) {
-            send(sd, message, strlen(message), 0);
+            pthread_mutex_lock(&client_mutex[i]);
+             send(sd, message, strlen(message), 0);
+            pthread_mutex_unlock(&client_mutex[i]);
         }
     }
-
-    pthread_mutex_unlock(&clients_mutex);
 }
 
 void *handle_client(void *arg) {

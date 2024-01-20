@@ -1,7 +1,7 @@
 use std::io::{Read, Write};
-use std::net::{TcpStream, Shutdown};
+use std::net::{TcpStream};
 use std::thread;
-use std::time::{Duration, Instant};
+use std::time::{Duration};
 use rand::{thread_rng, Rng};
 
 use structopt::StructOpt;
@@ -12,6 +12,12 @@ struct Opt {
     /// Port number to connect to
     #[structopt(short, long, default_value = "9090")]
     port: u16,
+    #[structopt(short, long, help = "Interval between reads in milliseconds.", default_value = "0")]
+    read_interval: u64,
+    #[structopt(short, long, default_value = "100")]
+    full_batch: u64,
+    #[structopt(short="P", long, default_value = "2")]
+    partial_batch: u64,
 }
 
 fn main() {
@@ -28,7 +34,7 @@ fn main() {
             // Split the TcpStream for simultaneous read and write
             let mut reader = stream.try_clone().expect("clone failed...");
             
-            let handle = thread::spawn(move || {
+            let _handle = thread::spawn(move || {
                 let mut received_data = String::new();
                 loop {
                     let mut buffer = [0; 512];
@@ -56,6 +62,7 @@ fn main() {
                                     }
                                     // Remove the processed message from the buffer
                                     received_data = received_data[index + 1..].to_string();
+                                    std::thread::sleep(std::time::Duration::from_millis(opt.read_interval));
                                 }
                             }
                         },
@@ -68,14 +75,14 @@ fn main() {
             });
             
             loop { 
-                // Send all messages one after another
-                for _ in 0..100 {
+                // Send some messages one after another
+                for _ in 0..opt.full_batch {
                     stream.write_all(message.as_bytes()).expect("write failed");
                     stream.flush().expect("flush failed");
                 }
 
-                // Send 100 messages in random-sized chunks
-                for _ in 0..100 {
+                // Send some messages in random-sized chunks
+                for _ in 0..opt.partial_batch {
                     let mut msg_bytes = message.as_bytes();
                     while !msg_bytes.is_empty() {
                         // Choose a random chunk size
@@ -90,12 +97,6 @@ fn main() {
                     }
                 }
             }
-
-            // Close the connection gracefully
-            stream.shutdown(Shutdown::Both).expect("shutdown call failed");
-            
-            // Wait for the reader thread to finish
-            handle.join().expect("The thread handling failed");
         },
         Err(e) => {
             println!("Failed to connect: {}", e);
