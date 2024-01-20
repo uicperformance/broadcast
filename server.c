@@ -41,7 +41,6 @@ void *handle_client(void *arg) {
     }
 
     while((read_size = getline(&buffer, &buflen, stream)) != -1) {
-        printf("got something\n");        
         broadcast_message(buffer, sock);
     }
 
