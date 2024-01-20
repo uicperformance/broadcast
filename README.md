@@ -63,6 +63,8 @@ slow reading as well.
 You can use whatever tools or help you want to build this program. You could consider starting with
 the epoll program I showed in class, but that's not at all a requirement.
 
+_Don't change server.c_: make a different program, in C or Rust as you prefer. Think of server.c as a reference for reasonable server behavior, nothing more. 
+
 Keep in mind that if you lean to heavily on others, or on AI tools, you're likely not learning much. In the midterm later, you will need the skills and knowledge you develop here.
 
 Sometimes, the right skill is to know how to use an AI tool to get something done fast. Other times, you need to understand how things actually work, to get to the goal. So take this as
