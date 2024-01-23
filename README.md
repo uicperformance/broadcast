@@ -40,7 +40,7 @@ connected clients.
 ## a client for testing
 
 The `client` folder has a handy client for checking correct behavior under a variety of 
-circumstances. To run it, use 
+circumstances. To run it, start two or more clients using 
 
 ```cargo run -- --port 5678```
 
